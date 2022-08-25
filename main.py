@@ -122,11 +122,10 @@ def run():
         }
     }
     logger.info(json.dumps(data, ensure_ascii=False))
-
-    scheduler.add_job(func=wechat.senMsg, args=[data], trigger="cron", hour=0, minute=8)
-    scheduler.start()
+    wechat.senMsg(data)
 
 
 if __name__ == '__main__':
     logger.add("log/WechatTempLatePusher.log", rotation="100 MB", retention='10 days', compression='zip', enqueue=True, level='INFO')
-    run()
+    scheduler.add_job(func=run, trigger="cron", hour=0, minute=8)
+    scheduler.start()
